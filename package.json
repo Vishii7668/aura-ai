@@ -1,0 +1,15 @@
+{
+  "name": "ai-mindset-website",
+  "version": "1.0.0",
+  "description": "AI MindSET – practical AI workshops, prompt library, insights and certificates",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}

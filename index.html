@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI MindSET · Practical AI for every team</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,300..900&family=JetBrains+Mono:wght@400;600&family=Cormorant+Garamond:wght@500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="assets/logo/AI-MindSET-icon.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<canvas id="bgArt" aria-hidden="true"></canvas>
+<canvas id="bgWave" aria-hidden="true"></canvas>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top" aria-label="AI MindSET home">
+      <span class="badge" style="--b:46px"><svg class="mark" width="32" height="32" viewBox="0 0 120 120" aria-hidden="true">
+ <defs>
+  <linearGradient id="gLh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--m-ink)"/><stop offset="1" style="stop-color:var(--m-ink);stop-opacity:.85"/></linearGradient>
+  <linearGradient id="gRh" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--m-ink)"/><stop offset="1" style="stop-color:var(--m-ink2)"/></linearGradient>
+  <linearGradient id="gYh" x1="0" y1="1" x2="1" y2="0"><stop offset="0" style="stop-color:var(--m-gold2)"/><stop offset="1" style="stop-color:var(--m-gold)"/></linearGradient>
+ </defs>
+ <path d="M51 8 H66 L39 104 H17 Z" fill="url(#gLh)"/><path d="M54 8 H69 L103 104 H81 Z" fill="url(#gRh)"/>
+ <rect x="8" y="102" width="40" height="8" rx="2" fill="url(#gLh)"/><rect x="72" y="102" width="40" height="8" rx="2" fill="url(#gRh)"/>
+ <path d="M14 84 C 40 82, 62 74, 98 44" fill="none" stroke="url(#gYh)" stroke-width="8" stroke-linecap="round"/>
+ <circle cx="14" cy="84" r="4" style="fill:var(--m-gold2)"/><circle cx="101" cy="41" r="9" fill="none" style="stroke:var(--m-gold)" stroke-width="4"/><circle cx="101" cy="41" r="3.5" style="fill:var(--m-gold)"/>
+</svg></span>
+    </a>
+    <ul>
+      <li><a href="#workshops">Workshops</a></li>
+      <li><a href="#prompts">Prompt library</a></li>
+      <li><a href="#guide">Getting started</a></li>
+      <li><a href="#who">Who it's for</a></li>
+      <li><a href="#insights">Insights</a></li>
+      <li><a href="#certificate">Certificate</a></li>
+    </ul>
+    <div style="display:flex;gap:10px;align-items:center"><a class="speak-btn" href="#contact">Speak to Our Team <span aria-hidden="true">→</span></a></div>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <div class="hero" id="hero">
+        <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <span class="tagline"><i></i>AI WORKSHOPS FOR COMPANY TEAMS</span>
+        <h1><span>Teach your team</span><span>to think</span><span>AI-first.</span></h1>
+        <p class="lead">Hands-on workshops, ready-to-use prompts and certificates that help people who have never used AI work faster on the tasks they already do.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#contact">Book a workshop</a>
+          <a class="btn btn-ghost" href="#try">Try a prompt</a>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div><strong>12<em>→</em>1</strong><span>HOURS ON A REPORT · TARGET</span></div>
+        <div><strong>60<em>+</em></strong><span>READY-TO-USE PROMPTS</span></div>
+        <div><strong>6</strong><span>WORKSHOPS THIS SEASON</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRY -->
+  <section class="try" id="try">
+    <div class="wrap try-grid">
+      <div>
+        <h2>Try a prompt right now</h2>
+        <p class="lead" style="margin-top:16px">Edit the example, press Run prompt and see the first draft appear. Every prompt in the library below can be opened here with one click.</p>
+      </div>
+      <div class="play" id="playground">
+        <div class="play-head"><b>Try a prompt</b><span id="playMode">Practice space</span></div>
+        <div class="play-body">
+          <label for="playInput">Edit the prompt, then run it</label>
+          <textarea id="playInput">Act as a professional business writer. Draft a clear, polite email to my manager about a delay in the machine maintenance schedule. Key points: maintenance moves by 2 days, no impact on customer dispatch, revised plan attached. Keep it under 120 words.</textarea>
+          <div class="play-row">
+            <span class="play-note"><b>Never paste</b> customer drawings, pricing or personal data.</span>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-ghost btn-sm" id="playCopy">Copy prompt</button>
+              <button class="btn btn-primary btn-sm" id="playRun">Run prompt</button><a class="btn btn-primary btn-sm" id="openClaude" target="_blank" rel="noopener" hidden>Open in Claude</a><a class="btn btn-ghost btn-sm" id="openGpt" target="_blank" rel="noopener" hidden>Open in ChatGPT</a>
+            </div>
+          </div>
+          <div class="answer empty" id="playOut" aria-live="polite">The answer appears here. Use it as a first draft, then check and edit it yourself.</div>
+        </div>
+      </div>
+  </section>
+
+  <!-- WHY -->
+  <section id="why">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Why every team needs an AI mindset</h2>
+        <p class="lead">Many teams still spend hours on manual data entry, reports and presentations. AI takes the repetitive part, so people can focus on quality, customers and improvement.</p>
+      </div>
+      <div class="why-grid">
+        <div class="stats">
+          <div class="stat"><strong>12 → 1</strong><span>hours to prepare a report or presentation (target)</span></div>
+          <div class="stat"><strong>5 → 1</strong><span>days for a week of routine office work (target)</span></div>
+          <div class="stat"><strong>60+</strong><span>ready-to-use prompts across 15 departments</span></div>
+          <div class="stat"><strong>Monthly</strong><span>hands-on workshops for every function</span></div>
+          <div class="stat wide"><strong>Augmentation, not automation</strong><span>AI makes people faster and better at their jobs. It does not replace them.</span></div>
+        </div>
+        <div class="chart-card">
+          <svg viewBox="0 0 480 300" role="img" aria-label="Rising bars with a curve showing efficiency, ROI and growth increasing over time">
+            <line x1="30" y1="20" x2="30" y2="260" stroke="var(--line)" stroke-width="1.5"/>
+            <line x1="30" y1="260" x2="460" y2="260" stroke="var(--line)" stroke-width="1.5"/>
+            <g fill="var(--surface-2)" stroke="var(--line)">
+              <rect x="60" y="232" width="40" height="28" rx="3"/><rect x="125" y="214" width="40" height="46" rx="3"/>
+              <rect x="190" y="186" width="40" height="74" rx="3"/><rect x="255" y="146" width="40" height="114" rx="3"/>
+              <rect x="320" y="96" width="40" height="164" rx="3"/><rect x="385" y="40" width="40" height="220" rx="3"/>
+            </g>
+            <path id="growthPath" d="M32 258 C 150 255, 250 232, 320 170 S 410 70, 440 34" fill="none" stroke="var(--curve)" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="335" cy="152" r="6" fill="var(--curve)"/>
+            <circle cx="440" cy="34" r="9" fill="var(--surface)" stroke="var(--curve)" stroke-width="3.5"/>
+            <text x="245" y="288" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--muted)" letter-spacing="3">EFFICIENCY · ROI · GROWTH</text>
+          </svg>
+          <p>Each month of practice compounds: more people, more workflows, more hours saved.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPROACH -->
+  <section id="approach">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Our approach: from readiness to results</h2>
+        <p class="lead">We don't start with tools. We start by understanding where time is lost, then build skills and automate step by step.</p>
+      </div>
+      <svg class="approach-svg" viewBox="0 0 1180 220" role="img" aria-label="Six steps rising from readiness to results: assess, mindset, strategy, enable, implement, optimize">
+        <line x1="20" y1="190" x2="1160" y2="190" stroke="var(--line)" stroke-width="1.5"/>
+        <text x="20" y="212" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--muted)" letter-spacing="2">READINESS</text>
+        <text x="1160" y="212" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="12" fill="var(--muted)" letter-spacing="2">RESULTS</text>
+        <path d="M70 170 C 300 160, 500 135, 640 112 S 980 60, 1110 40" fill="none" stroke="var(--curve)" stroke-width="3.5"/>
+        <g font-family="JetBrains Mono, monospace" font-size="13" font-weight="600" fill="var(--hi)" text-anchor="middle">
+          <circle cx="70" cy="170" r="9" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/><circle cx="70" cy="170" r="3.5" fill="var(--curve)"/><text x="78" y="148">01 ASSESS</text>
+          <circle cx="278" cy="160" r="9" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/><circle cx="278" cy="160" r="3.5" fill="var(--curve)"/><text x="278" y="138">02 MINDSET</text>
+          <circle cx="486" cy="136" r="9" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/><circle cx="486" cy="136" r="3.5" fill="var(--curve)"/><text x="486" y="114">03 STRATEGY</text>
+          <circle cx="694" cy="104" r="9" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/><circle cx="694" cy="104" r="3.5" fill="var(--curve)"/><text x="694" y="82">04 ENABLE</text>
+          <circle cx="902" cy="72" r="9" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/><circle cx="902" cy="72" r="3.5" fill="var(--curve)"/><text x="902" y="50">05 IMPLEMENT</text>
+          <circle cx="1110" cy="40" r="9" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/><circle cx="1110" cy="40" r="3.5" fill="var(--curve)"/><text x="1090" y="20">06 OPTIMIZE</text>
+        </g>
+      </svg>
+      <div class="steps">
+        <div class="step"><em>01</em><h3>Assess</h3><p>Map manual work and measure the hours it takes today.</p></div>
+        <div class="step"><em>02</em><h3>Mindset</h3><p>AI awareness for leaders and every employee.</p></div>
+        <div class="step"><em>03</em><h3>Strategy</h3><p>Pick the use cases that save the most time.</p></div>
+        <div class="step"><em>04</em><h3>Enable</h3><p>Workshops, approved tools and AI Champions.</p></div>
+        <div class="step"><em>05</em><h3>Implement</h3><p>Pilot automations and AI agents on real work.</p></div>
+        <div class="step"><em>06</em><h3>Optimize</h3><p>Measure hours saved, scale to all plants, improve.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORKSHOPS -->
+  <section id="workshops">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Workshop calendar</h2>
+        <p class="lead">Every month follows the same rhythm, so learning turns into habit. Register for a session and bring one real task from your work.</p>
+      </div>
+      <div class="rhythm">
+        <div><small>Week 1</small><b>AI workshop</b><p>3-hour hands-on batch per team or function</p></div>
+        <div><small>Week 2</small><b>Apply on real work</b><p>Use AI on one of your own tasks</p></div>
+        <div><small>Week 3</small><b>AI clinic</b><p>Office hours with the AI team</p></div>
+        <div><small>Week 4</small><b>Monthly AI session</b><p>Share wins and learn a new tool</p></div>
+      </div>
+      <div class="ws-list" id="wsList"></div>
+      <p class="status" id="wsStatus" style="margin-top:14px"></p>
+    </div>
+  </section>
+
+  <!-- PROMPTS -->
+  <section id="prompts">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Prompt library</h2>
+        <p class="lead">Pick your department to open its prompts. Copy a prompt, replace the words in [brackets] with your details, and use it in your AI tool.</p>
+      </div>
+      <div class="cat-grid" id="catGrid"></div>
+    </div>
+  </section>
+
+  <!-- GUIDE -->
+  <section id="guide">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Getting started with AI at work</h2>
+        <p class="lead">You don't need to be technical. If you can use Excel or WhatsApp, you can use AI.</p>
+      </div>
+      <div class="guide-grid">
+        <ol class="start">
+          <li><div><b>Get access to an approved AI tool</b><span>Use the AI tool your company has approved. Avoid personal or free accounts for company data.</span></div></li>
+          <li><div><b>Attend your Level 1 workshop</b><span>Three hours, hands-on, online or at your workplace. Register in the calendar above.</span></div></li>
+          <li><div><b>Pick one task that eats your time</b><span>A weekly report, a PPT, an email you write every day.</span></div></li>
+          <li><div><b>Use a prompt from the library</b><span>Give the AI a role, the task, your details and the format you want.</span></div></li>
+          <li><div><b>Check, edit and share your win</b><span>AI writes the first draft; you own the final version. Share the hours you saved at the monthly session.</span></div></li>
+        </ol>
+        <div class="rules">
+          <div class="rule do"><h3>✓ Do</h3><ul><li>Use company-approved AI tools only</li><li>Check every number and fact before sharing</li><li>Remove names, prices and part numbers when not needed</li><li>Ask your manager or IT team when unsure</li></ul></div>
+          <div class="rule dont"><h3>✕ Don't</h3><ul><li>Paste customer drawings, pricing or confidential files</li><li>Share personal data of colleagues or customers</li><li>Send AI output to a customer without review</li><li>Use AI for final quality or safety decisions</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO -->
+  <section id="who">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Built for people new to AI</h2>
+        <p class="lead">Workshops start from zero and use examples from everyday work, so anyone can follow along.</p>
+      </div>
+      <div class="plants">
+        <div class="plant"><b>Manufacturing teams</b><span>Shift reports, breakdown logs, SOPs</span></div>
+        <div class="plant"><b>Quality</b><span>8D reports, root cause analysis</span></div>
+        <div class="plant"><b>Production planning</b><span>Daily data, dashboards, MIS</span></div>
+        <div class="plant"><b>Sales and business development</b><span>RFQs, customer decks, emails</span></div>
+        <div class="plant"><b>Purchase</b><span>Quote comparison, supplier follow-ups</span></div>
+        <div class="plant"><b>Finance and HR</b><span>MIS packs, policies, training</span></div>
+        <div class="plant"><b>Managers and leaders</b><span>Review packs, decisions, planning</span></div>
+        <div class="plant"><b>Design and engineering</b><span>Specs, DFMEA, ECNs, BOM checks</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSIGHTS -->
+  <section id="insights">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>How AI drives business success</h2>
+        <p class="lead">Practical advice and clear analysis on artificial intelligence and its transformative impact on everyday work.</p>
+      </div>
+      <div class="ins-grid" id="insGrid"></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="wrap">
+      <div class="sec-head"><h2>Common questions</h2><p class="lead">Still unsure? Ask at the AI clinic in week 3 of every month.</p></div>
+      <details><summary>Will AI replace my job?</summary><p>No. AI takes over repetitive tasks like data entry and first drafts. You keep the judgment, approvals and relationships, and spend more time on higher-value work.</p></details>
+      <details><summary>Do I need a technical background?</summary><p>No. Level 1 workshops are built for everyone, including shop-floor supervisors and office staff.</p></details>
+      <details><summary>Is company data safe?</summary><p>Yes, when you use your company's approved tools and follow the rules above. Never paste customer drawings, pricing or personal data into any AI tool.</p></details>
+      <details><summary>Can my company book a private workshop?</summary><p>Yes. Workshops can run online or on-site for one team or a whole company, using examples from your own work. Use the contact details at the bottom of this page.</p></details>
+      <details><summary>How do I get my certificate?</summary><p>After attending a workshop, use the certificate link at the bottom of this page to download your certificate of completion.</p></details>
+    </div>
+  </section>
+</main>
+<div id="articleView" hidden></div>
+
+<!-- FOOTER -->
+<footer id="certificate">
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="brand" href="#top">
+          <span class="badge" style="--b:76px"><svg class="mark" width="54" height="54" viewBox="0 0 120 120" aria-hidden="true">
+ <defs>
+  <linearGradient id="gLf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--m-ink)"/><stop offset="1" style="stop-color:var(--m-ink);stop-opacity:.85"/></linearGradient>
+  <linearGradient id="gRf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--m-ink)"/><stop offset="1" style="stop-color:var(--m-ink2)"/></linearGradient>
+  <linearGradient id="gYf" x1="0" y1="1" x2="1" y2="0"><stop offset="0" style="stop-color:var(--m-gold2)"/><stop offset="1" style="stop-color:var(--m-gold)"/></linearGradient>
+ </defs>
+ <path d="M51 8 H66 L39 104 H17 Z" fill="url(#gLf)"/><path d="M54 8 H69 L103 104 H81 Z" fill="url(#gRf)"/>
+ <rect x="8" y="102" width="40" height="8" rx="2" fill="url(#gLf)"/><rect x="72" y="102" width="40" height="8" rx="2" fill="url(#gRf)"/>
+ <path d="M14 84 C 40 82, 62 74, 98 44" fill="none" stroke="url(#gYf)" stroke-width="8" stroke-linecap="round"/>
+ <circle cx="14" cy="84" r="4" style="fill:var(--m-gold2)"/><circle cx="101" cy="41" r="9" fill="none" style="stroke:var(--m-gold)" stroke-width="4"/><circle cx="101" cy="41" r="3.5" style="fill:var(--m-gold)"/>
+</svg></span>
+        </a>
+        <div class="tipbox">
+          <p>Get one practical AI tip every month.</p>
+          <button class="btn btn-sm" id="tipBtn">Subscribe to monthly tips</button>
+          <small id="tipNote">One short, practical tip you can use at work the same day.</small>
+        </div>
+      </div>
+      <div>
+        <h4>Learn</h4>
+        <ul><li><a href="#workshops">Workshop calendar</a></li><li><a href="#prompts">Prompt library</a></li><li><a href="#guide">Getting started</a></li><li><a href="#faq">Common questions</a></li></ul>
+        <h4 style="margin-top:26px">About</h4>
+        <ul><li><a href="#insights">Insights</a></li><li><a href="#approach">Our approach</a></li><li><a href="#who">Who it's for</a></li><li><a href="#why">Why AI MindSET</a></li></ul>
+      </div>
+      <div>
+        <h4 id="contact">Get in touch</h4>
+        <ul class="contact">
+          <li><span class="ic">@</span><a id="cfgEmail" href="#"></a></li>
+          <li><span class="ic">☎</span><a id="cfgPhone" href="#"></a></li>
+          <li><span class="ic">◇</span><span>Workshops online and on-site</span></li>
+          <li><span class="ic">◇</span><span>Private workshops for company teams</span></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Certification</h4>
+        <button class="cert-thumb" id="certThumb" aria-label="Open certificate download"><canvas id="certThumbCv" width="2000" height="1414"></canvas></button>
+        <p class="cert-link"><button id="certLink">Download</button> your certificate</p>
+      </div>
+    </div>
+    <div class="legal"><span>© 2026 AI MindSET. All rights reserved.</span><span>Practical AI for every team</span></div>
+  </div>
+</footer>
+
+<!-- CERTIFICATE DIALOG -->
+<dialog id="certDlg" aria-labelledby="certTitle">
+  <div class="dlg-head"><h3 id="certTitle">Download your certificate</h3><button class="btn btn-ghost btn-sm" id="certClose">Close</button></div>
+  <div class="dlg-body">
+    <div class="fields">
+      <div class="field"><label for="cName">Full name</label><input id="cName" maxlength="60" placeholder="e.g. Rahul Sharma" autocomplete="name"></div>
+      <div class="field"><label for="cPlant">Company or team (optional)</label><input id="cPlant" maxlength="60" placeholder="e.g. Quality team, ABC Pvt Ltd"></div>
+      <div class="field"><label for="cWs">Workshop completed</label><select id="cWs"></select></div>
+      <div class="field"><label for="cDate">Completion date</label><input id="cDate" type="date"></div>
+    </div>
+    <canvas id="certCanvas" width="2000" height="1414" aria-label="Certificate preview"></canvas>
+    <div class="dlg-foot">
+      <span class="status" id="certStatus">Your certificate updates as you type.</span>
+      <button class="btn btn-primary" id="certSave">Download certificate</button>
+    </div>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
