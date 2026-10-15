@@ -1,15 +1,19 @@
-/* AI MindSET website – main script */
+/* Aura AI website – main script */
 
 /* =========================================================
    EDIT YOUR DETAILS HERE
    ========================================================= */
 const CONFIG = {
-  email: "you@example.com",          // your contact email (used for bookings, registrations, tips)
+  email: "visheshmaurya82@gmail.com", // your contact email (used for bookings, registrations, tips)
   phone: "+91 00000 00000",          // your phone number
-  founderLabel: "FOUNDER"            // label under the signature on certificates
+  founderLabel: "FOUNDER",           // label under the signature on certificates
+  // Paste your Google Apps Script Web App URL here (see README → "Registration counter").
+  // Leave it empty and Register still turns green and the count goes up, but only on the same browser.
+  registrationApi: ""
 };
 /* ---------- site background: bokeh + particle wave ---------- */
 (function(){
+  if(window.AIM_NEW_BG) return;
   const cv=document.getElementById("bgArt"), ctx=cv.getContext("2d"), cw=document.getElementById("bgWave"), wx=cw.getContext("2d");
   const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
   let W=0,H=0,dpr=1,bokeh=[],cols=110,rows=46,raf=0,running=true;
@@ -211,7 +215,7 @@ function showCategory(slug){
   page.appendChild(others);
   view.appendChild(page);
   main.hidden = true; view.hidden = false; view.style.paddingTop = "40px";
-  document.title = c + " prompts · AI MindSET"; window.scrollTo(0,0);
+  document.title = c + " prompts · Aura AI"; window.scrollTo(0,0);
 }
 
 /* ---------- playground (sample capability) ---------- */
@@ -226,7 +230,7 @@ function setNoSample(){
 function syncOpenLinks(){ const q=encodeURIComponent($("#playInput").value); $("#openClaude").href="https://claude.ai/new?q="+q; $("#openGpt").href="https://chatgpt.com/?q="+q; }
 $("#playInput").addEventListener("input", syncOpenLinks); syncOpenLinks();
 setNoSample();
-const SYSTEM = "You are the AI MindSET practice assistant. You help company employees who are new to AI, many of them working in manufacturing and office roles in India. Answer the user's prompt helpfully and concisely in plain text without markdown symbols. If the prompt still contains [placeholders], fill them with realistic example details and say so in one line at the end. If the user appears to paste confidential customer drawings, pricing or personal data, remind them not to share such data with AI tools.";
+const SYSTEM = "You are the Aura AI practice assistant. You help company employees who are new to AI, many of them working in manufacturing and office roles in India. Answer the user's prompt helpfully and concisely in plain text without markdown symbols. If the prompt still contains [placeholders], fill them with realistic example details and say so in one line at the end. If the user appears to paste confidential customer drawings, pricing or personal data, remind them not to share such data with AI tools.";
 runBtn.onclick = async ()=>{
   if(!sample) return;
   const prompt = $("#playInput").value.trim();
@@ -250,12 +254,12 @@ function renderWorkshops(){
   WORKSHOPS.forEach(w=>{
     const mine = myData.workshops.includes(w.id);
     const btn = el("button",{class:"btn btn-sm "+(mine?"btn-primary registered":"btn-primary"),text: mine?"Registered ✓":"Register"});
-    btn.onclick = ()=>{ if(db&&uid) toggleReg(w.id); else mailto("Workshop registration: "+w.title+" ("+w.day+" "+w.mon+")", "Hi,\n\nI would like to register for \""+w.title+"\" on "+w.day+" "+w.mon+", "+w.time+".\n\nName:\nCompany / team:\nPhone:\n\nThank you."); };
+    btn.onclick = ()=>{ if(db&&uid) toggleReg(w.id); else webRegister(w, btn); };
     const n = counts[w.id]||0;
     list.appendChild(el("div",{class:"ws"},[
       el("div",{class:"ws-date"},[document.createTextNode(w.day), el("small",{text:w.mon})]),
       el("div",{},[ el("h3",{text:w.title}), el("div",{class:"ws-meta"},[ el("span",{class:"tag "+w.lv,text:w.level}), el("span",{class:"tag",text:w.where}), el("span",{class:"tag",text:w.time}) ]) ]),
-      el("div",{class:"ws-side"},[ btn, el("span",{class:"ws-count",text: db ? (n===1?"1 person registered":n+" people registered") : ""}) ])
+      el("div",{class:"ws-side"},[ btn, el("span",{class:"ws-count",text: (n===1?"1 person registered":n+" people registered")}) ])
     ]));
   });
 }
@@ -273,14 +277,48 @@ async function toggleReg(id){
 }
 renderWorkshops();
 
+/* ---------- website registration (no email needed) ---------- */
+const WEB_KEY = "aim-registered";
+function webState(){ try{ return JSON.parse(localStorage.getItem(WEB_KEY)||"{}"); }catch{ return {}; } }
+function saveWebState(v){ try{ localStorage.setItem(WEB_KEY, JSON.stringify(v)); }catch{} }
+(function(){ const v = webState(); myData.workshops = Object.keys(v.regs||{}); myData.tips = !!v.tips; if(!CONFIG.registrationApi) myData.workshops.forEach(id=>{ counts[id]=(counts[id]||0)+1; }); })();
+async function loadCounts(){
+  if(!CONFIG.registrationApi) return;
+  try{ const r = await fetch(CONFIG.registrationApi); const j = await r.json(); if(j && j.counts){ counts = j.counts; renderWorkshops(); } }catch{}
+}
+async function webRegister(w, btn){
+  if(myData.workshops.includes(w.id)){ toast("You're already registered"); return; }
+  btn.disabled = true; btn.textContent = "Registering…";
+  try{
+    if(CONFIG.registrationApi){
+      const r = await fetch(CONFIG.registrationApi,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({type:"workshop",workshopId:w.id,title:w.title,date:w.day+" "+w.mon})});
+      const j = await r.json(); if(!j.ok) throw new Error("not saved"); if(j.counts) counts = j.counts;
+    } else { counts[w.id] = (counts[w.id]||0) + 1; }
+    const v = webState(); v.regs = Object.assign({}, v.regs, {[w.id]: new Date().toISOString()}); saveWebState(v);
+    myData.workshops = Object.keys(v.regs); renderWorkshops(); toast("You're registered");
+  }catch(e){ btn.disabled = false; btn.textContent = "Register"; toast("Registration couldn't be saved. Check your internet and try again."); }
+}
+async function webSubscribe(){
+  if(myData.tips){ toast("You're already subscribed"); return; }
+  try{
+    if(CONFIG.registrationApi){
+      const r = await fetch(CONFIG.registrationApi,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({type:"tips",workshopId:"monthly-tips",title:"Monthly AI tips",date:""})});
+      const j = await r.json(); if(!j.ok) throw new Error("not saved");
+    }
+    const v = webState(); v.tips = true; saveWebState(v); myData.tips = true; renderTip(); toast("Subscribed to monthly tips");
+  }catch(e){ toast("Couldn't subscribe right now. Try again later."); }
+}
+renderWorkshops(); loadCounts();
+
 /* ---------- tips subscribe ---------- */
 function renderTip(){
   const b = $("#tipBtn");
-  b.textContent = myData.tips ? "Subscribed ✓  (tap to stop)" : "Subscribe to monthly tips";
+  b.textContent = myData.tips ? (myDoc ? "Subscribed ✓  (tap to stop)" : "Subscribed ✓") : "Subscribe to monthly tips";
+  b.classList.toggle("registered", !!myData.tips);
 
 }
 $("#tipBtn").onclick = async ()=>{
-  if(!myDoc){ mailto("Subscribe to monthly AI tips", "Hi,\n\nPlease add me to the monthly AI tips list.\n\nName:\nCompany / team:\n\nThank you."); return; } myData.tips = !myData.tips; renderTip();
+  if(!myDoc){ webSubscribe(); return; } myData.tips = !myData.tips; renderTip();
   try{ await saveMine(); toast(myData.tips ? "Subscribed to monthly tips" : "Unsubscribed"); }
   catch{ myData.tips = !myData.tips; renderTip(); toast("Couldn't save. Try again later."); }
 };
@@ -316,7 +354,7 @@ const dlg = $("#certDlg"), cv = $("#certCanvas"), cx = cv.getContext("2d");
 const thumbCx = $("#certThumbCv").getContext("2d");
 WORKSHOPS.forEach(w=>$("#cWs").appendChild(el("option",{value:w.title,text:w.title})));
 $("#cDate").valueAsDate = new Date();
-function certId(){ const s = ($("#cName").value+"|"+$("#cWs").value+"|"+$("#cDate").value); let h=0; for(const c of s){ h=(h*31+c.charCodeAt(0))>>>0; } return "AIM-"+h.toString(36).toUpperCase().padStart(7,"0").slice(0,7); }
+function certId(){ const s = ($("#cName").value+"|"+$("#cWs").value+"|"+$("#cDate").value); let h=0; for(const c of s){ h=(h*31+c.charCodeAt(0))>>>0; } return "AURA-"+h.toString(36).toUpperCase().padStart(7,"0").slice(0,7); }
 function fmtDate(v){ const d = v ? new Date(v+"T00:00:00") : new Date(); return d.toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"}); }
 function spaced(c, text, x, y, px){ if("letterSpacing" in c){ c.letterSpacing = px+"px"; c.fillText(text, x + px/2, y); c.letterSpacing = "0px"; } else c.fillText(text, x, y); }
 function gold(c, x0, y0, x1, y1){ const g = c.createLinearGradient(x0,y0,x1,y1); g.addColorStop(0,"#8A6500"); g.addColorStop(.35,"#E9C75A"); g.addColorStop(.6,"#FFF0B3"); g.addColorStop(.8,"#C9A227"); g.addColorStop(1,"#8A6500"); return g; }
@@ -338,11 +376,11 @@ function paintCert(c, o){
   c.fillStyle="#000"; c.fillRect(72,72,450,H-144);
   c.strokeStyle=gold(c,72,0,522,H); c.lineWidth=3; c.beginPath(); c.moveTo(522,72); c.lineTo(522,H-72); c.stroke();
   const px=297;
-  c.fillStyle="#FFE58A"; c.font="700 24px Archivo, Arial"; spaced(c,"AI",px,210,14);
-  c.font="400 80px Archivo, Arial"; const mW=c.measureText("Mind").width; c.font="800 80px Archivo, Arial"; const sW=c.measureText("SET").width;
-  const sx=px-(mW+sW)/2; c.textAlign="left"; c.fillStyle="#F7F2DC"; c.font="400 80px Archivo, Arial"; c.fillText("Mind",sx,292);
-  c.fillStyle=gold(c,sx+mW,230,sx+mW+sW,300); c.font="800 80px Archivo, Arial"; c.fillText("SET",sx+mW,292); c.textAlign="center";
-  c.fillStyle="#B5AE93"; c.font="500 22px Archivo, Arial"; c.fillText("Practical AI for every team",px,340);
+  c.fillStyle="#FFE58A"; c.font="700 24px Archivo, Arial"; spaced(c,"CERTIFIED BY",px,210,8);
+  c.font="400 80px Archivo, Arial"; const mW=c.measureText("Aura ").width; c.font="800 80px Archivo, Arial"; const sW=c.measureText("AI").width;
+  const sx=px-(mW+sW)/2; c.textAlign="left"; c.fillStyle="#F7F2DC"; c.font="400 80px Archivo, Arial"; c.fillText("Aura ",sx,292);
+  c.fillStyle=gold(c,sx+mW,230,sx+mW+sW,300); c.font="800 80px Archivo, Arial"; c.fillText("AI",sx+mW,292); c.textAlign="center";
+  c.fillStyle="#B5AE93"; c.font="500 22px Archivo, Arial"; c.fillText("Level up your work with AI",px,340);
   // seal with ribbons
   const sy=690;
   c.fillStyle="#8A6500";
@@ -376,12 +414,12 @@ function paintCert(c, o){
   if(sigImg.complete && sigImg.naturalWidth){ const sw=330, sh=sw*sigImg.naturalHeight/sigImg.naturalWidth; c.drawImage(sigImg,gx-sw/2,ly-sh+38,sw,sh); }
   c.strokeStyle="#111"; c.lineWidth=2; c.beginPath(); c.moveTo(dx-170,ly); c.lineTo(dx+170,ly); c.moveTo(gx-190,ly); c.lineTo(gx+190,ly); c.stroke();
   c.fillStyle="#9A7300"; c.font="700 20px Archivo, Arial"; spaced(c,"DATE",dx,ly+42,6); spaced(c,(typeof CONFIG!=="undefined"?CONFIG.founderLabel:"FOUNDER"),gx,ly+42,6);
-  c.fillStyle="#5C5440"; c.font="400 22px Archivo, Arial"; c.fillText("AI MindSET",gx,ly+76);
+  c.fillStyle="#5C5440"; c.font="400 22px Archivo, Arial"; c.fillText("Aura AI",gx,ly+76);
   c.restore();
 }
 function current(){ return { name: $("#cName").value.trim() || "Your Name", plant: $("#cPlant").value.trim(), ws: $("#cWs").value, ds: fmtDate($("#cDate").value), id: certId() }; }
 function drawCert(){ paintCert(cx, current()); }
-function drawThumb(){ paintCert(thumbCx, { name:"Your Name", plant:"", ws: WORKSHOPS[0].title, ds: fmtDate(""), id:"AIM-0000000" }); }
+function drawThumb(){ paintCert(thumbCx, { name:"Your Name", plant:"", ws: WORKSHOPS[0].title, ds: fmtDate(""), id:"AURA-000000" }); }
 function redrawAll(){ drawThumb(); if(dlg.open) drawCert(); }
 markImg.onload = redrawAll; sigImg.onload = redrawAll;
 if(document.fonts){ Promise.all(["400 60px 'Great Vibes'","600 60px 'Cormorant Garamond'","700 60px 'Cormorant Garamond'","400 30px Archivo","800 30px Archivo"].map(f=>document.fonts.load(f).catch(()=>{}))).then(redrawAll); }
@@ -399,8 +437,8 @@ $("#certSave").onclick = async ()=>{
   cv.toBlob(async blob=>{
     if(!blob){ $("#certStatus").textContent = "The certificate image couldn't be created. Try again."; return; }
     const safe = $("#cName").value.trim().replace(/[^a-z0-9]+/gi,"-").replace(/^-|-$/g,"") || "certificate";
-    if(!downloads){ const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=`AI-MindSET-Certificate-${safe}.png`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),4000); $("#certStatus").textContent = "Certificate downloaded."; return; }
-    try{ await downloads.save({filename:`AI-MindSET-Certificate-${safe}.png`, data: blob}); $("#certStatus").textContent = "Certificate downloaded."; }
+    if(!downloads){ const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=`Aura-AI-Certificate-${safe}.png`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),4000); $("#certStatus").textContent = "Certificate downloaded."; return; }
+    try{ await downloads.save({filename:`Aura-AI-Certificate-${safe}.png`, data: blob}); $("#certStatus").textContent = "Certificate downloaded."; }
     catch(e){ $("#certStatus").textContent = e && e.code==="declined" ? "Download cancelled." : (e && e.code==="rate_limited" ? "A download is already waiting for confirmation." : "Download isn't available here. Right-click the certificate to save it."); }
   }, "image/png");
 };
@@ -411,7 +449,7 @@ function insCard(a){
   const link = el("a",{class:"ins-card",href:"#insight/"+a.slug,"aria-label":a.title});
   const im = el("img",{src:a.src,alt:a.alt,loading:"lazy"});
   link.appendChild(el("div",{class:"ins-img"},[im]));
-  link.appendChild(el("div",{class:"ins-body"},[ el("span",{class:"ins-cat",text:a.cat}), el("h3",{text:a.title}), el("span",{class:"ins-meta",text:"AI MindSET · October 2026"}), el("span",{class:"ins-more",text:"Read article →"}) ]));
+  link.appendChild(el("div",{class:"ins-body"},[ el("span",{class:"ins-cat",text:a.cat}), el("h3",{text:a.title}), el("span",{class:"ins-meta",text:"Aura AI · October 2026"}), el("span",{class:"ins-more",text:"Read article →"}) ]));
   return link;
 }
 INSIGHTS.forEach(a=>$("#insGrid").appendChild(insCard(a)));
@@ -425,7 +463,7 @@ function showArticle(slug){
   wrap.appendChild(back);
   wrap.appendChild(el("span",{class:"ins-cat",text:a.cat}));
   wrap.appendChild(el("h1",{text:a.title}));
-  wrap.appendChild(el("p",{class:"art-meta",text:"AI MindSET · October 2026 · 4 min read"}));
+  wrap.appendChild(el("p",{class:"art-meta",text:"Aura AI · October 2026 · 4 min read"}));
   wrap.appendChild(el("div",{class:"art-hero"},[el("img",{src:a.src,alt:a.alt})]));
   const body = el("div",{class:"art-body"}); body.innerHTML = a.body;
   const pr = el("div",{class:"art-prompt"},[ el("b",{text:"Try this prompt"}), el("pre",{text:a.prompt}) ]);
@@ -439,14 +477,14 @@ function showArticle(slug){
   wrap.appendChild(nx);
   artView.appendChild(wrap);
   mainEl.hidden = true; artView.hidden = false;
-  document.title = a.title + " · AI MindSET";
+  document.title = a.title + " · Aura AI";
   window.scrollTo(0,0);
 }
 function route(){
   const h = location.hash;
   if(h.startsWith("#insight/")){ showArticle(decodeURIComponent(h.slice(9))); return; }
   if(h.startsWith("#prompts/")){ showCategory(decodeURIComponent(h.slice(9))); return; }
-  if(!artView.hidden){ artView.hidden = true; mainEl.hidden = false; document.title = "AI MindSET · Practical AI for every team";
+  if(!artView.hidden){ artView.hidden = true; mainEl.hidden = false; document.title = "Aura AI · Level up your work with AI";
     let t=null; try{ t = h && document.querySelector(h); }catch{} if(t) setTimeout(()=>t.scrollIntoView(),0); }
 }
 addEventListener("hashchange", route);

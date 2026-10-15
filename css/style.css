@@ -1,4 +1,4 @@
-/* AI MindSET website – styles */
+/* Aura AI website – styles */
 :root{
   --bg:#000000; --surface:rgba(18,18,16,.78); --surface-2:rgba(34,32,24,.85); --ink:#F7F2DC; --muted:#B5AE93; --line:#2C2A22;
   --block:#FFE58A; --on-block:#000000; --on-block-2:#3A3420; --hi:#FFE58A; --curve:#FFD84D;
@@ -291,3 +291,29 @@ footer .badge{border-radius:16px;border-color:#FFE58A}
 .stat.wide strong{font-size:1.7rem;font-stretch:88%}
 dialog{max-height:92vh;overflow:auto}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* 3D story */
+.story{position:relative;height:520vh;border-top:1px solid var(--line);padding:0}
+.story-sticky{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden}
+.story-canvas{position:absolute;inset:0}
+.story-canvas canvas{width:100%!important;height:100%!important;display:block}
+.story-copy{position:relative;z-index:2;height:100%;display:flex;align-items:center;pointer-events:none}
+.story-cap{position:absolute;max-width:440px;opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.story-cap.on{opacity:1;transform:none}
+.story-cap em{font:600 .75rem var(--mono);font-style:normal;letter-spacing:.16em;color:#FFE58A}
+.story-cap h2{margin:14px 0 12px;font-size:clamp(2rem,4vw,3.2rem);text-shadow:0 2px 30px rgba(0,0,0,.8)}
+.story-cap p{color:var(--muted);font-size:1.08rem;text-shadow:0 1px 20px #000}
+.story-dots{position:absolute;right:28px;top:50%;transform:translateY(-50%);display:grid;gap:12px;z-index:3}
+.story-dots i{width:8px;height:8px;border-radius:50%;background:#3A3420;transition:background .3s,transform .3s}
+.story-dots i.on{background:#FFE58A;transform:scale(1.4)}
+.story-hint{position:absolute;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);font:600 .7rem var(--mono);letter-spacing:.3em;color:#8F8A78;z-index:3;animation:hint 2s ease-in-out infinite}
+@keyframes hint{0%,100%{opacity:.4;transform:translate(-50%,0)}50%{opacity:1;transform:translate(-50%,6px)}}
+.story-static{height:auto}.story-static .story-sticky{position:relative;height:auto;padding:80px 0}
+.story-static .story-cap{position:relative;opacity:1;transform:none;margin-bottom:40px}
+.story-static .story-copy{display:block}.story-static .story-dots,.story-static .story-hint{display:none}
+@media (min-width:761px){.story-copy{justify-content:flex-start}}
+@media (max-width:760px){.story-copy{align-items:flex-end;padding-bottom:110px}.story-cap{max-width:none;right:20px}.story-dots{right:12px}}
+@media (prefers-reduced-motion:reduce){.story-cap{transition:none}.story-hint{animation:none}}
+/* 3D card tilt */
+.cat-card,.ins-card,.stat,.step,.plant{transform-style:preserve-3d;will-change:transform;transition:transform .25s ease,border-color .2s}
+.tilt-on{border-color:#FFE58A!important;background-image:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(255,229,138,.10),transparent 55%)}

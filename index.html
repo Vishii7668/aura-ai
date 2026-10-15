@@ -3,32 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>AI MindSET · Practical AI for every team</title>
+<title>Aura AI · Level up your work with AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,300..900&family=JetBrains+Mono:wght@400;600&family=Cormorant+Garamond:wght@500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
-<link rel="icon" type="image/png" href="assets/logo/AI-MindSET-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Archivo:wdth,wght@75..125,300..900&family=JetBrains+Mono:wght@400;600&family=Cormorant+Garamond:wght@500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="assets/logo/Aura-AI-icon.png">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/genz.css">
 </head>
 <body>
-<canvas id="bgArt" aria-hidden="true"></canvas>
-<canvas id="bgWave" aria-hidden="true"></canvas>
+<canvas id="bgGL" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
+<script>window.AIM_NEW_BG=true;</script>
 
 <header>
   <div class="wrap nav">
-    <a class="brand" href="#top" aria-label="AI MindSET home">
-      <span class="badge" style="--b:46px"><svg class="mark" width="32" height="32" viewBox="0 0 120 120" aria-hidden="true">
+    <a class="brand" href="#top" aria-label="Aura AI home">
+      <span class="badge" style="--b:46px"><svg class="mark aura-mark" width="32" height="32" viewBox="-6 -6 132 132" aria-hidden="true">
  <defs>
-  <linearGradient id="gLh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--m-ink)"/><stop offset="1" style="stop-color:var(--m-ink);stop-opacity:.85"/></linearGradient>
-  <linearGradient id="gRh" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--m-ink)"/><stop offset="1" style="stop-color:var(--m-ink2)"/></linearGradient>
-  <linearGradient id="gYh" x1="0" y1="1" x2="1" y2="0"><stop offset="0" style="stop-color:var(--m-gold2)"/><stop offset="1" style="stop-color:var(--m-gold)"/></linearGradient>
+  <linearGradient id="shLh" x1="0" y1="0" x2="1" y2="1">
+   <stop offset="0" stop-color="#FFF6D6"/><stop offset=".45" stop-color="#E8DFC0"/><stop offset=".5" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#E8DFC0"/><stop offset="1" stop-color="#A79F84"/>
+   <animateTransform attributeName="gradientTransform" type="translate" values="-1 -1;1 1;1 1" keyTimes="0;.6;1" dur="3.6s" repeatCount="indefinite"/>
+  </linearGradient>
+  <linearGradient id="shYh" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFC933"/><stop offset="1" stop-color="#FFE58A"/></linearGradient>
+  <radialGradient id="glh"><stop offset="0" stop-color="#FFE58A" stop-opacity=".55"/><stop offset="1" stop-color="#FFE58A" stop-opacity="0"/></radialGradient>
+  <path id="orbh" d="M8 70 A54 20 -18 1 1 112 50 A54 20 -18 1 1 8 70"/>
  </defs>
- <path d="M51 8 H66 L39 104 H17 Z" fill="url(#gLh)"/><path d="M54 8 H69 L103 104 H81 Z" fill="url(#gRh)"/>
- <rect x="8" y="102" width="40" height="8" rx="2" fill="url(#gLh)"/><rect x="72" y="102" width="40" height="8" rx="2" fill="url(#gRh)"/>
- <path d="M14 84 C 40 82, 62 74, 98 44" fill="none" stroke="url(#gYh)" stroke-width="8" stroke-linecap="round"/>
- <circle cx="14" cy="84" r="4" style="fill:var(--m-gold2)"/><circle cx="101" cy="41" r="9" fill="none" style="stroke:var(--m-gold)" stroke-width="4"/><circle cx="101" cy="41" r="3.5" style="fill:var(--m-gold)"/>
+ <circle cx="60" cy="60" r="58" fill="url(#glh)"><animate attributeName="opacity" values=".35;.9;.35" dur="3s" repeatCount="indefinite"/></circle>
+ <use href="#orbh" fill="none" stroke="#FFE58A" stroke-opacity=".35" stroke-width="2" stroke-dasharray="3 6"/>
+ <g class="aura-a">
+  <path d="M51 8 H66 L39 104 H17 Z" fill="url(#shLh)"/><path d="M54 8 H69 L103 104 H81 Z" fill="url(#shLh)" opacity=".85"/>
+  <rect x="8" y="102" width="40" height="8" rx="2" fill="url(#shLh)"/><rect x="72" y="102" width="40" height="8" rx="2" fill="url(#shLh)" opacity=".85"/>
+ </g>
+ <path d="M14 84 C 40 82, 62 74, 98 44" fill="none" stroke="url(#shYh)" stroke-width="8" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100">
+  <animate attributeName="stroke-dashoffset" values="100;0;0;100" keyTimes="0;.35;.85;1" dur="4s" repeatCount="indefinite"/>
+ </path>
+ <circle cx="101" cy="41" r="9" fill="none" stroke="#FFE58A" stroke-width="4"><animate attributeName="r" values="7;10;7" dur="2s" repeatCount="indefinite"/><animate attributeName="stroke-opacity" values="1;.5;1" dur="2s" repeatCount="indefinite"/></circle>
+ <circle cx="101" cy="41" r="3.5" fill="#FFE58A"/>
+ <circle r="4.5" fill="#FFE58A"><animateMotion dur="5s" repeatCount="indefinite" rotate="auto"><mpath href="#orbh"/></animateMotion><animate attributeName="opacity" values="1;.6;1" dur="1.2s" repeatCount="indefinite"/></circle>
 </svg></span>
-    </a>
+    <span class="brand-name">Aura<b>AI</b></span></a>
     <ul>
       <li><a href="#workshops">Workshops</a></li>
       <li><a href="#prompts">Prompt library</a></li>
@@ -44,23 +58,46 @@
 <main id="top">
   <!-- HERO -->
   <div class="hero" id="hero">
-        <div class="wrap hero-inner">
-      <div class="hero-copy">
-        <span class="tagline"><i></i>AI WORKSHOPS FOR COMPANY TEAMS</span>
-        <h1><span>Teach your team</span><span>to think</span><span>AI-first.</span></h1>
-        <p class="lead">Hands-on workshops, ready-to-use prompts and certificates that help people who have never used AI work faster on the tasks they already do.</p>
-        <div class="actions">
-          <a class="btn btn-primary" href="#contact">Book a workshop</a>
-          <a class="btn btn-ghost" href="#try">Try a prompt</a>
+    <div class="hero-pin">
+      <div class="hero-gl" id="heroGL" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <span class="tagline"><i></i>AI WORKSHOPS · NO CODE NEEDED</span>
+          <h1>Your team,<br>but <span class="rot" id="rotWord" data-words="10x faster|AI-first|zero busywork|way smarter">10x faster</span></h1>
+          <p class="lead">Hands-on AI workshops, 60+ ready prompts and a certificate worth flexing. No coding. No jargon. Just your real work, done faster.</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="#workshops">Book a workshop →</a>
+            <a class="btn btn-ghost" href="#try">Try a prompt</a>
+          </div>
+          <div class="stickers" aria-label="Highlights"><span class="sticker">✦ No code</span><span class="sticker">60+ prompts</span><span class="sticker">Free certificate</span></div>
+        </div>
+        <div class="hero-stats">
+          <div><strong>12<em>→</em>1</strong><span>HOURS ON A REPORT · TARGET</span></div>
+          <div><strong>60<em>+</em></strong><span>READY-TO-USE PROMPTS</span></div>
+          <div><strong>15</strong><span>DEPARTMENTS COVERED</span></div>
         </div>
       </div>
-      <div class="hero-stats">
-        <div><strong>12<em>→</em>1</strong><span>HOURS ON A REPORT · TARGET</span></div>
-        <div><strong>60<em>+</em></strong><span>READY-TO-USE PROMPTS</span></div>
-        <div><strong>6</strong><span>WORKSHOPS THIS SEASON</span></div>
-      </div>
+      <div class="scroll-cue" aria-hidden="true"><i></i>SCROLL</div>
     </div>
   </div>
+
+  <div class="marquee" aria-hidden="true"><div class="marquee-track"><span>NO CODE NEEDED ✦</span><span>60+ READY PROMPTS ✦</span><span>15 DEPARTMENTS ✦</span><span>12 HRS → 1 HR ✦</span><span>GET CERTIFIED ✦</span><span>REAL WORK, REAL RESULTS ✦</span><span>NO CODE NEEDED ✦</span><span>60+ READY PROMPTS ✦</span><span>15 DEPARTMENTS ✦</span><span>12 HRS → 1 HR ✦</span><span>GET CERTIFIED ✦</span><span>REAL WORK, REAL RESULTS ✦</span></div></div>
+
+  <!-- 3D STORY (scroll-driven) -->
+  <section class="story" id="story" aria-label="How Aura AI works, told as a scroll animation">
+    <div class="story-sticky">
+      <div class="story-canvas" id="storyCanvas" aria-hidden="true"></div>
+      <div class="wrap story-copy">
+        <div class="story-cap on"><em>01 · THE START</em><h2>Every team begins with scattered, manual work.</h2><p>Reports, data entry and follow-ups pulled in every direction.</p></div>
+        <div class="story-cap"><em>02 · LEARN</em><h2>One mindset brings it together.</h2><p>Hands-on workshops turn curiosity into everyday skill.</p></div>
+        <div class="story-cap"><em>03 · AURA AI</em><h2>Practical AI for every team.</h2><p>Ready prompts for every department, from design to accounts.</p></div>
+        <div class="story-cap"><em>04 · AUTOMATE</em><h2>Let AI handle the repetitive part.</h2><p>Copilots and agents take over drafts, checks and summaries.</p></div>
+        <div class="story-cap"><em>05 · GROW</em><h2>Measure the hours you get back.</h2><p>Twelve-hour tasks done in about one, and the gains compound.</p></div>
+      </div>
+      <div class="story-dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+      <div class="story-hint" aria-hidden="true">SCROLL</div>
+    </div>
+  </section>
 
   <!-- TRY -->
   <section class="try" id="try">
@@ -225,6 +262,8 @@
     </div>
   </section>
 
+  <div class="marquee alt" aria-hidden="true"><div class="marquee-track"><span>LEARN ✦</span><span>PROMPT ✦</span><span>AUTOMATE ✦</span><span>SHIP ✦</span><span>REPEAT ✦</span><span>LEVEL UP ✦</span><span>LEARN ✦</span><span>PROMPT ✦</span><span>AUTOMATE ✦</span><span>SHIP ✦</span><span>REPEAT ✦</span><span>LEVEL UP ✦</span><span>LEARN ✦</span><span>PROMPT ✦</span><span>AUTOMATE ✦</span><span>SHIP ✦</span><span>REPEAT ✦</span><span>LEVEL UP ✦</span></div></div>
+
   <!-- INSIGHTS -->
   <section id="insights">
     <div class="wrap">
@@ -256,18 +295,30 @@
     <div class="foot">
       <div>
         <a class="brand" href="#top">
-          <span class="badge" style="--b:76px"><svg class="mark" width="54" height="54" viewBox="0 0 120 120" aria-hidden="true">
+          <span class="badge" style="--b:76px"><svg class="mark aura-mark" width="54" height="54" viewBox="-6 -6 132 132" aria-hidden="true">
  <defs>
-  <linearGradient id="gLf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--m-ink)"/><stop offset="1" style="stop-color:var(--m-ink);stop-opacity:.85"/></linearGradient>
-  <linearGradient id="gRf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--m-ink)"/><stop offset="1" style="stop-color:var(--m-ink2)"/></linearGradient>
-  <linearGradient id="gYf" x1="0" y1="1" x2="1" y2="0"><stop offset="0" style="stop-color:var(--m-gold2)"/><stop offset="1" style="stop-color:var(--m-gold)"/></linearGradient>
+  <linearGradient id="shLf" x1="0" y1="0" x2="1" y2="1">
+   <stop offset="0" stop-color="#FFF6D6"/><stop offset=".45" stop-color="#E8DFC0"/><stop offset=".5" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#E8DFC0"/><stop offset="1" stop-color="#A79F84"/>
+   <animateTransform attributeName="gradientTransform" type="translate" values="-1 -1;1 1;1 1" keyTimes="0;.6;1" dur="3.6s" repeatCount="indefinite"/>
+  </linearGradient>
+  <linearGradient id="shYf" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FFC933"/><stop offset="1" stop-color="#FFE58A"/></linearGradient>
+  <radialGradient id="glf"><stop offset="0" stop-color="#FFE58A" stop-opacity=".55"/><stop offset="1" stop-color="#FFE58A" stop-opacity="0"/></radialGradient>
+  <path id="orbf" d="M8 70 A54 20 -18 1 1 112 50 A54 20 -18 1 1 8 70"/>
  </defs>
- <path d="M51 8 H66 L39 104 H17 Z" fill="url(#gLf)"/><path d="M54 8 H69 L103 104 H81 Z" fill="url(#gRf)"/>
- <rect x="8" y="102" width="40" height="8" rx="2" fill="url(#gLf)"/><rect x="72" y="102" width="40" height="8" rx="2" fill="url(#gRf)"/>
- <path d="M14 84 C 40 82, 62 74, 98 44" fill="none" stroke="url(#gYf)" stroke-width="8" stroke-linecap="round"/>
- <circle cx="14" cy="84" r="4" style="fill:var(--m-gold2)"/><circle cx="101" cy="41" r="9" fill="none" style="stroke:var(--m-gold)" stroke-width="4"/><circle cx="101" cy="41" r="3.5" style="fill:var(--m-gold)"/>
+ <circle cx="60" cy="60" r="58" fill="url(#glf)"><animate attributeName="opacity" values=".35;.9;.35" dur="3s" repeatCount="indefinite"/></circle>
+ <use href="#orbf" fill="none" stroke="#FFE58A" stroke-opacity=".35" stroke-width="2" stroke-dasharray="3 6"/>
+ <g class="aura-a">
+  <path d="M51 8 H66 L39 104 H17 Z" fill="url(#shLf)"/><path d="M54 8 H69 L103 104 H81 Z" fill="url(#shLf)" opacity=".85"/>
+  <rect x="8" y="102" width="40" height="8" rx="2" fill="url(#shLf)"/><rect x="72" y="102" width="40" height="8" rx="2" fill="url(#shLf)" opacity=".85"/>
+ </g>
+ <path d="M14 84 C 40 82, 62 74, 98 44" fill="none" stroke="url(#shYf)" stroke-width="8" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100">
+  <animate attributeName="stroke-dashoffset" values="100;0;0;100" keyTimes="0;.35;.85;1" dur="4s" repeatCount="indefinite"/>
+ </path>
+ <circle cx="101" cy="41" r="9" fill="none" stroke="#FFE58A" stroke-width="4"><animate attributeName="r" values="7;10;7" dur="2s" repeatCount="indefinite"/><animate attributeName="stroke-opacity" values="1;.5;1" dur="2s" repeatCount="indefinite"/></circle>
+ <circle cx="101" cy="41" r="3.5" fill="#FFE58A"/>
+ <circle r="4.5" fill="#FFE58A"><animateMotion dur="5s" repeatCount="indefinite" rotate="auto"><mpath href="#orbf"/></animateMotion><animate attributeName="opacity" values="1;.6;1" dur="1.2s" repeatCount="indefinite"/></circle>
 </svg></span>
-        </a>
+        <span class="brand-name big">Aura<b>AI</b><em>Level up your work with AI</em></span></a>
         <div class="tipbox">
           <p>Get one practical AI tip every month.</p>
           <button class="btn btn-sm" id="tipBtn">Subscribe to monthly tips</button>
@@ -278,7 +329,7 @@
         <h4>Learn</h4>
         <ul><li><a href="#workshops">Workshop calendar</a></li><li><a href="#prompts">Prompt library</a></li><li><a href="#guide">Getting started</a></li><li><a href="#faq">Common questions</a></li></ul>
         <h4 style="margin-top:26px">About</h4>
-        <ul><li><a href="#insights">Insights</a></li><li><a href="#approach">Our approach</a></li><li><a href="#who">Who it's for</a></li><li><a href="#why">Why AI MindSET</a></li></ul>
+        <ul><li><a href="#insights">Insights</a></li><li><a href="#approach">Our approach</a></li><li><a href="#who">Who it's for</a></li><li><a href="#why">Why Aura AI</a></li></ul>
       </div>
       <div>
         <h4 id="contact">Get in touch</h4>
@@ -295,7 +346,7 @@
         <p class="cert-link"><button id="certLink">Download</button> your certificate</p>
       </div>
     </div>
-    <div class="legal"><span>© 2026 AI MindSET. All rights reserved.</span><span>Practical AI for every team</span></div>
+    <div class="legal"><span>© 2026 Aura AI. All rights reserved.</span><span>Level up your work with AI ✦</span></div>
   </div>
 </footer>
 
@@ -320,5 +371,9 @@
 <div class="toast" id="toast" role="status"></div>
 
 <script src="js/script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/bg.js"></script>
+<script src="js/hero3d.js"></script>
+<script src="js/story3d.js"></script>
 </body>
 </html>

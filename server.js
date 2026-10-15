@@ -1,4 +1,4 @@
-// AI MindSET – tiny local web server (no extra packages needed)
+// Aura AI – tiny local web server (no extra packages needed)
 // Run:  npm start   (or)   node server.js
 const http = require("http");
 const fs = require("fs");
@@ -55,7 +55,7 @@ function start(port) {
   });
   server.listen(port, () => {
     console.log("");
-    console.log("  AI MindSET website is running");
+    console.log("  Aura AI website is running");
     console.log(`  Open:  http://localhost:${port}`);
     console.log("  Stop:  press Ctrl + C");
     console.log("");
