@@ -8,7 +8,7 @@ const CONFIG = {
   phone: "+91 00000 00000",          // your phone number
   founderLabel: "FOUNDER",           // label under the signature on certificates
   // Paste your Google Apps Script Web App URL here (see README → "Registration counter").
-  // Leave it empty and Register still turns green and the count goes up, but only on the same browser.
+  // Connect it to turn on: confirmation emails, founder notifications and certificate checks.
   registrationApi: ""
 };
 /* ---------- site background: bokeh + particle wave ---------- */
@@ -286,29 +286,59 @@ async function loadCounts(){
   if(!CONFIG.registrationApi) return;
   try{ const r = await fetch(CONFIG.registrationApi); const j = await r.json(); if(j && j.counts){ counts = j.counts; renderWorkshops(); } }catch{}
 }
+function contactForm(mode, title){
+  return new Promise(res=>{
+    const d=$("#regDlg"); const saved=(webState().contact)||{}; const sub = mode==="subscribe";
+    $("#regTitle").textContent = sub ? "Get monthly AI tips" : "Register for the workshop";
+    $("#rFor").textContent = title || ""; $("#rSave").textContent = sub ? "Subscribe" : "Register";
+    $("#rNote").textContent = sub ? "One practical AI tip a month. Unsubscribe anytime." : "You'll get a confirmation email right away.";
+    ["#rNameWrap","#rPhoneWrap","#rCompanyWrap"].forEach(x=>$(x).hidden = sub);
+    $("#rName").value=saved.name||""; $("#rEmail").value=saved.email||""; $("#rPhone").value=saved.phone||""; $("#rCompany").value=saved.company||""; $("#rErr").textContent="";
+    const done=v=>{ $("#rSave").onclick=null; $("#rClose").onclick=null; d.close(); res(v); };
+    $("#rClose").onclick=()=>done(null);
+    $("#rSave").onclick=()=>{
+      const v={ name:$("#rName").value.trim(), email:$("#rEmail").value.trim().toLowerCase(), phone:$("#rPhone").value.trim(), company:$("#rCompany").value.trim() };
+      if(!sub && !v.name){ $("#rErr").textContent="Enter your full name."; $("#rName").focus(); return; }
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)){ $("#rErr").textContent="Enter a valid email, for example name@gmail.com."; $("#rEmail").focus(); return; }
+      done(v);
+    };
+    if(typeof d.showModal==="function") d.showModal(); else d.setAttribute("open",""); (sub?$("#rEmail"):$("#rName")).focus();
+  });
+}
+async function api(body){
+  const r = await fetch(CONFIG.registrationApi,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body)});
+  return r.json();
+}
 async function webRegister(w, btn){
-  if(myData.workshops.includes(w.id)){ toast("You're already registered"); return; }
+  if(myData.workshops.includes(w.id)){ toast("You're already registered ✦"); return; }
+  let contact=null;
+  if(CONFIG.registrationApi){ contact = await contactForm("register", w.title+" · "+w.day+" "+w.mon+" · "+w.time); if(!contact) return; }
   btn.disabled = true; btn.textContent = "Registering…";
   try{
+    let regId = null;
     if(CONFIG.registrationApi){
-      const r = await fetch(CONFIG.registrationApi,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({type:"workshop",workshopId:w.id,title:w.title,date:w.day+" "+w.mon})});
-      const j = await r.json(); if(!j.ok) throw new Error("not saved"); if(j.counts) counts = j.counts;
+      const j = await api(Object.assign({action:"register",workshopId:w.id,title:w.title,date:w.day+" "+w.mon,time:w.time,mode:w.where}, contact));
+      if(!j.ok) throw new Error(j.error||"not saved"); if(j.counts) counts = j.counts; regId = j.id;
     } else { counts[w.id] = (counts[w.id]||0) + 1; }
-    const v = webState(); v.regs = Object.assign({}, v.regs, {[w.id]: new Date().toISOString()}); saveWebState(v);
-    myData.workshops = Object.keys(v.regs); renderWorkshops(); toast("You're registered");
-  }catch(e){ btn.disabled = false; btn.textContent = "Register"; toast("Registration couldn't be saved. Check your internet and try again."); }
+    const v = webState(); v.regs = Object.assign({}, v.regs, {[w.id]: new Date().toISOString()}); if(contact) v.contact = contact; if(regId) v.ids = Object.assign({}, v.ids, {[w.id]: regId}); saveWebState(v);
+    myData.workshops = Object.keys(v.regs); renderWorkshops();
+    toast(CONFIG.registrationApi ? "You're registered! Check your email ✦" : "You're registered");
+  }catch(e){ btn.disabled = false; btn.textContent = "Register"; toast(e && e.message && e.message!=="not saved" ? e.message : "Registration couldn't be saved. Check your internet and try again."); }
 }
 async function webSubscribe(){
   if(myData.tips){ toast("You're already subscribed"); return; }
   try{
     if(CONFIG.registrationApi){
-      const r = await fetch(CONFIG.registrationApi,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({type:"tips",workshopId:"monthly-tips",title:"Monthly AI tips",date:""})});
-      const j = await r.json(); if(!j.ok) throw new Error("not saved");
+      const c = await contactForm("subscribe"); if(!c) return;
+      const j = await api({action:"subscribe", email:c.email}); if(!j.ok) throw new Error(j.error||"not saved");
+      const v0 = webState(); v0.contact = Object.assign({}, v0.contact, {email:c.email}); saveWebState(v0);
     }
     const v = webState(); v.tips = true; saveWebState(v); myData.tips = true; renderTip(); toast("Subscribed to monthly tips");
   }catch(e){ toast("Couldn't subscribe right now. Try again later."); }
 }
 renderWorkshops(); loadCounts();
+(function(){ if(!CONFIG.registrationApi) return; try{ if(sessionStorage.getItem("aura-visit")) return; sessionStorage.setItem("aura-visit","1"); }catch(e){}
+  api({action:"visit", page: location.pathname + location.hash, ref: document.referrer.slice(0,200), device: matchMedia("(max-width:760px)").matches ? "Mobile" : "Desktop"}).catch(()=>{}); })();
 
 /* ---------- tips subscribe ---------- */
 function renderTip(){
@@ -424,13 +454,25 @@ function redrawAll(){ drawThumb(); if(dlg.open) drawCert(); }
 markImg.onload = redrawAll; sigImg.onload = redrawAll;
 if(document.fonts){ Promise.all(["400 60px 'Great Vibes'","600 60px 'Cormorant Garamond'","700 60px 'Cormorant Garamond'","400 30px Archivo","800 30px Archivo"].map(f=>document.fonts.load(f).catch(()=>{}))).then(redrawAll); }
 drawThumb();
-function openCert(){ drawCert(); if(typeof dlg.showModal==="function") dlg.showModal(); else dlg.setAttribute("open",""); $("#cName").focus();
+function openCert(){ try{ const c=(webState().contact)||{}; if(c.email && !$("#cEmail").value) $("#cEmail").value=c.email; if(c.name && !$("#cName").value) $("#cName").value=c.name; }catch(e){} drawCert(); if(typeof dlg.showModal==="function") dlg.showModal(); else dlg.setAttribute("open",""); $("#cName").focus();
   $("#certStatus").textContent = "Your certificate updates as you type."; $("#certSave").hidden = false; }
 $("#certLink").onclick = openCert; $("#certThumb").onclick = openCert;
 $("#certClose").onclick = ()=>dlg.close();
 ["#cName","#cPlant","#cWs","#cDate"].forEach(s=>$(s).addEventListener("input",drawCert));
 
 $("#certSave").onclick = async ()=>{
+  if(CONFIG.registrationApi){
+    const email = $("#cEmail").value.trim().toLowerCase();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ $("#certStatus").textContent = "Enter the email you used to register."; $("#cEmail").focus(); return; }
+    const w = WORKSHOPS.find(x=>x.title===$("#cWs").value);
+    $("#certStatus").textContent = "Checking your registration…"; $("#certSave").disabled = true;
+    try{
+      const j = await api({action:"verify", email, workshopId: w ? w.id : "", certId: certId()});
+      $("#certSave").disabled = false;
+      if(!j.ok){ $("#certStatus").innerHTML = ""; $("#certStatus").append(document.createTextNode((j.error||"You need to register first.")+" "), el("a",{href:"#workshops",text:"Register for a workshop →"})); const lk=$("#certStatus a"); if(lk) lk.onclick=()=>dlg.close(); return; }
+      if(!$("#cName").value.trim() && j.name){ $("#cName").value = j.name; }
+    }catch(e){ $("#certSave").disabled = false; $("#certStatus").textContent = "Couldn't check your registration. Check your internet and try again."; return; }
+  }
   if(!$("#cName").value.trim()){ $("#certStatus").textContent = "Enter your full name first."; $("#cName").focus(); return; }
   
   drawCert();

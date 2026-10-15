@@ -355,6 +355,7 @@
   <div class="dlg-head"><h3 id="certTitle">Download your certificate</h3><button class="btn btn-ghost btn-sm" id="certClose">Close</button></div>
   <div class="dlg-body">
     <div class="fields">
+      <div class="field"><label for="cEmail">Email you registered with</label><input id="cEmail" type="email" maxlength="120" placeholder="name@gmail.com" autocomplete="email"></div>
       <div class="field"><label for="cName">Full name</label><input id="cName" maxlength="60" placeholder="e.g. Rahul Sharma" autocomplete="name"></div>
       <div class="field"><label for="cPlant">Company or team (optional)</label><input id="cPlant" maxlength="60" placeholder="e.g. Quality team, ABC Pvt Ltd"></div>
       <div class="field"><label for="cWs">Workshop completed</label><select id="cWs"></select></div>
@@ -365,6 +366,21 @@
       <span class="status" id="certStatus">Your certificate updates as you type.</span>
       <button class="btn btn-primary" id="certSave">Download certificate</button>
     </div>
+  </div>
+</dialog>
+
+<dialog id="regDlg" aria-labelledby="regTitle">
+  <div class="dlg-head"><h3 id="regTitle">Register for the workshop</h3><button class="btn btn-ghost btn-sm" id="rClose" type="button">Close</button></div>
+  <div class="dlg-body">
+    <p class="status" id="rFor"></p>
+    <div class="fields">
+      <div class="field" id="rNameWrap"><label for="rName">Full name</label><input id="rName" maxlength="80" placeholder="e.g. Riya Kapoor" autocomplete="name"></div>
+      <div class="field"><label for="rEmail">Gmail / email</label><input id="rEmail" type="email" maxlength="120" placeholder="name@gmail.com" autocomplete="email"></div>
+      <div class="field" id="rPhoneWrap"><label for="rPhone">Phone (optional)</label><input id="rPhone" type="tel" maxlength="30" placeholder="+91 98765 43210" autocomplete="tel"></div>
+      <div class="field" id="rCompanyWrap"><label for="rCompany">Company or team (optional)</label><input id="rCompany" maxlength="80" placeholder="e.g. Quality team, ABC Pvt Ltd" autocomplete="organization"></div>
+    </div>
+    <p class="status" id="rErr" role="alert" style="color:var(--red)"></p>
+    <div class="dlg-foot"><span class="status" id="rNote">You'll get a confirmation email right away.</span><button class="btn btn-primary" id="rSave" type="button">Register</button></div>
   </div>
 </dialog>
 

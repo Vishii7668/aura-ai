@@ -84,26 +84,34 @@ Upload the whole folder (except `server.js` and `package.json`, which are only f
 - **Your own domain:** upload to `public_html` with your hosting file manager
 
 
-## Registration counter (shared count for all visitors) – free, 5 minutes
+## Registrations, emails and notifications (free, about 10 minutes)
 
-GitHub Pages can't store data, so the shared count is kept in a Google Sheet.
+This turns on:
+- **Registration form** (name, email, phone, company) on every Register button
+- **Automatic confirmation email** to the participant's Gmail
+- **Founder notification email** for every registration and every certificate download
+- **Certificate only for registered people** (checked by email + workshop)
+- **Visit log** and an optional **daily summary email**
+- One **shared count** under each Register button
 
-1. Open https://sheets.new and name the sheet **Aura AI Registrations**.
-2. In the sheet: **Extensions → Apps Script**.
-3. Delete everything in the editor, paste the contents of `google-apps-script/Code.gs`, and click **Save**.
-4. Click **Deploy → New deployment** → gear icon → **Web app**.
+### Steps
+1. Sign in to Google with **visheshmaurya82@gmail.com** and open https://sheets.new. Name it **Aura AI – Registrations**.
+2. **Extensions → Apps Script.** Delete everything, paste all of `google-apps-script/Code.gs`, click **Save**.
+3. In the function list at the top choose **testSetup**, click **Run**, and allow the permissions (Advanced → Go to project → Allow). You'll receive a test email.
+4. **Deploy → New deployment →** gear icon **→ Web app**
    - Execute as: **Me**
    - Who has access: **Anyone**
-   - Click **Deploy**, allow the permissions, and **copy the Web app URL** (it ends in `/exec`).
-5. Open `js/script.js` and paste the URL on **line 12**:
-   ```js
-   registrationApi: "https://script.google.com/macros/s/XXXXXXXX/exec"
-   ```
-6. Push the change:
-   ```bash
-   git add .
-   git commit -m "Connect registration counter"
-   git push
-   ```
+   - **Deploy** and copy the **Web app URL** (ends in `/exec`).
+5. Open `js/script.js`, **line 12**, paste the URL: `registrationApi: "https://script.google.com/macros/s/XXXX/exec"`
+6. Push your site again (`git add -A`, `git commit -m "Connect backend"`, `git push`).
 
-Every registration now appears as a new row in your Google Sheet (date and time, workshop), and the count under each Register button is the same for every visitor.
+### Optional: daily summary email
+In Apps Script click **Triggers (clock icon) → Add trigger** → function **dailySummary** → **Time-driven → Day timer** → choose a time → **Save**.
+
+### Mark attendance (optional)
+In the **Registrations** sheet, column **Attended (Y/N)**: type **N** for anyone who didn't attend. They won't be able to download a certificate. Leave it empty or **Y** to allow.
+
+### If you change Code.gs later
+**Deploy → Manage deployments → ✏️ Edit → Version: New version → Deploy.** The URL stays the same.
+
+Note: free Gmail accounts can send about 100 emails a day through Apps Script.
